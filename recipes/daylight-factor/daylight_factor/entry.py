@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from honeybee_radiance_pollination import GenSkyWithCertailIllum, CreateOctreeWithSky, \
     CreateRadianceFolder
 
-from daylight_factor._raytracing import RayTracing
+from ._raytracing import DaylightFactorRayTracing
 
 
 @dataclass
@@ -61,13 +61,13 @@ class DaylightFactorEntryPoint(DAG):
         ]
 
     @task(
-        template=RayTracing,
+        template=DaylightFactorRayTracing,
         needs=[create_rad_folder, create_octree],
         loop=create_rad_folder._outputs.sensor_grids,
         sub_folder='initial_results/{{item.name}}',  # create a subfolder for each grid
         sub_paths={'sensor_grid': 'grid/{{item.name}}.pts'}  # sub_path for sensor_grid arg
     )
-    def ray_tracing(
+    def daylight_factor_ray_tracing(
         self,
         sensor_count=sensor_count,
         radiance_parameters=radiance_parameters,

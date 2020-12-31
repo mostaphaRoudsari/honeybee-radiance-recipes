@@ -7,7 +7,7 @@ from honeybee_radiance_pollination import SplitGrid, RayTracingDaylightFactor, M
 
 
 @dataclass
-class RayTracing(DAG):
+class DaylightFactorRayTracing(DAG):
     """Daylight factor-ray-tracing."""
     # inputs
 
@@ -55,15 +55,17 @@ class RayTracing(DAG):
         self, radiance_parameters=radiance_parameters,
         grid=split_grid._outputs.output_folder, scene_file=octree_file
     ):
-        return {}
+        return [
+            {'from': RayTracingDaylightFactor()._outputs.result, 'to': '{{item.name}}.res'}
+        ]
 
     @task(
         template=MergeFiles, needs=[ray_tracing]
     )
-    def merge_results(self, extension='.res', folder='results'):
+    def merge_results(self, name=grid_name, extension='.res', folder='results'):
         return [
             {
                 'from': MergeFiles()._outputs.result_file,
-                'to': '../../results/{{self.grid_name}}.res'
+                'to': '../../results/{{self.name}}.res'
             }
         ]
