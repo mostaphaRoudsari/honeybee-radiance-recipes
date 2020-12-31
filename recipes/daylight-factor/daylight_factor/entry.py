@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from honeybee_radiance_pollination import GenSkyWithCertailIllum, CreateOctreeWithSky, \
     CreateRadianceFolder
 
-from ._raytracing import RayTracing
+from daylight_factor._raytracing import RayTracing
 
 
 @dataclass

@@ -1,4 +1,4 @@
-from .daylight_factor import DaylightFactorEntryPoint
+from .entry import DaylightFactorEntryPoint
 
 __queenbee__ = {
     'name': 'daylight-factor',
