@@ -1,10 +1,12 @@
 from typing import Dict, List
+from queenbee_dsl import alias
 from queenbee_dsl.dag import Inputs, DAG, task, Outputs
 from dataclasses import dataclass
 from honeybee_radiance_pollination import GenSkyWithCertailIllum, CreateOctreeWithSky, \
     CreateRadianceFolder
 
 from ._raytracing import DaylightFactorRayTracing
+from ._handler import input_model_alias, parse_daylight_factor_results
 
 
 @dataclass
@@ -25,7 +27,8 @@ class DaylightFactorEntryPoint(DAG):
 
     model = Inputs.file(
         description='A Honeybee model in HBJSON file format.',
-        extensions=['json', 'hbjson']
+        extensions=['json', 'hbjson'],
+        alias=input_model_alias
     )
 
     @task(template=GenSkyWithCertailIllum)
@@ -79,4 +82,4 @@ class DaylightFactorEntryPoint(DAG):
         # instead we access the results folder directly as an output
         pass
 
-    results = Outputs.folder(source='results')
+    results = Outputs.folder(source='results', alias=parse_daylight_factor_results)
