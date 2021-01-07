@@ -1,9 +1,9 @@
 from typing import Dict, List
-from queenbee_dsl import alias
 from queenbee_dsl.dag import Inputs, DAG, task, Outputs
 from dataclasses import dataclass
-from honeybee_radiance_pollination import GenSkyWithCertailIllum, CreateOctreeWithSky, \
-    CreateRadianceFolder
+from pollination_honeybee_radiance.sky import GenSkyWithCertainIllum
+from pollination_honeybee_radiance.octree import CreateOctreeWithSky
+from pollination_honeybee_radiance.translate import CreateRadianceFolder
 
 from ._raytracing import DaylightFactorRayTracing
 from ._handler import input_model_alias, parse_daylight_factor_results
@@ -31,10 +31,10 @@ class DaylightFactorEntryPoint(DAG):
         alias=input_model_alias
     )
 
-    @task(template=GenSkyWithCertailIllum)
+    @task(template=GenSkyWithCertainIllum)
     def generate_sky(self) -> List[Dict]:
         return [
-            {'from': GenSkyWithCertailIllum()._outputs.sky, 'to': 'resources/100000_lux.sky'}
+            {'from': GenSkyWithCertainIllum()._outputs.sky, 'to': 'resources/100000_lux.sky'}
             ]
 
     @task(template=CreateRadianceFolder)

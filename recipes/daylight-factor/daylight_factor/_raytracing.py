@@ -3,7 +3,8 @@
 from queenbee_dsl.dag import Inputs, DAG, task
 from dataclasses import dataclass
 
-from honeybee_radiance_pollination import SplitGrid, RayTracingDaylightFactor, MergeFiles
+from pollination_honeybee_radiance.grid import SplitGrid, MergeFiles
+from pollination_honeybee_radiance.raytrace import RayTracingDaylightFactor
 
 
 @dataclass
